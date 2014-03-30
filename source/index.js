@@ -7,6 +7,7 @@ var theApp = (function(theApp, undefined) {
 		stylus = require('stylus'),
 		nib = require('nib'),
 		axis = require('axis-css'),
+		compressor = require('node-minify'),
 		twitter = require('ntwitter'),
 		passport = require('passport'),
 		FacebookStrategy = require('passport-facebook').Strategy,
@@ -58,8 +59,15 @@ var theApp = (function(theApp, undefined) {
 		app.use( express.methodOverride() );
 		app.use( app.router );
 		app.use( express.static(__dirName + '/public') );
-		
 		app.use( express.errorHandler( { dumpExceptions: true, showStack: true } ) );
+	});
+	new compressor.minify({
+		type: 'clean-css',
+		fileIn: ['public/css/style.css'],
+		fileOut: 'public/css/style-min.css',
+		callback: function(err, min){
+			if(err)console.log(err);
+		}
 	});
 
 	process.on('uncaughtException', function(err) {

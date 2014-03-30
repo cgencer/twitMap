@@ -26,6 +26,7 @@
 		"stylus": "*",
 		"nib": "*",
 		"axis-css": "*",
+		"node-minify": "*",
     	"underscore": "1.5.*",
 		"underscore.string": "*",
     	"sqlite3": "2.1.x",
