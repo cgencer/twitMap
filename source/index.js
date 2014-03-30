@@ -3,10 +3,18 @@ var theApp = (function(theApp, undefined) {
 	var fs = require("fs"),
 		io = require('socket.io'),
 		http = require('http'),
+		express = require('express'),
+		stylus = require('stylus'),
+		nib = require('nib'),
+		axis = require('axis-css'),
 		twitter = require('ntwitter'),
+		passport = require('passport'),
+		FacebookStrategy = require('passport-facebook').Strategy,
 		cronJob = require('cron').CronJob,
 		_ = require('underscore'),
 		path = require('path');
+
+	require('./routes');
 
 	var env = process.env.NODE_ENV || 'development',
 		cfg = require('./config')[env];
@@ -17,22 +25,25 @@ var theApp = (function(theApp, undefined) {
 
 	var app = express();
 	var compile = function(str, path) {
-		return stylus(str).set('filename', path).use(nib());
+		return stylus(str).set('filename', path).use( axis() ).use( nib() );
 	}
 
 	app.configure('development', function () {app.use(express.errorHandler());});
+	var __dirName = __dirname;
+	__dirName = __dirName.slice(0, __dirName.lastIndexOf('/')); 	// use the app dir (parent)
 	app.configure(function () {
-		app.set('views', __dirname + '/views');
-		app.set('view engine', 'jade');
-		app.use(express.favicon());
-		app.use(express.logger({ immediate: true, format: 'dev' }));
-		app.use(express.cookieParser());
-		app.use(express.bodyParser());
-		app.use(express.session({ secret: 'bukalemun' }));
-		app.use( stylus.middleware({ 
+		app.set( 'views', __dirName + '/views' );
+		app.set( 'view engine', 'jade' );
+		app.use( express.favicon() );
+		app.use( express.logger( { immediate: true, format: 'dev' } ) );
+		app.use( express.cookieParser() );
+		app.use( express.bodyParser() );
+		app.use( express.session( { secret: 'bukalemun' } ) );
+		app.use( stylus.middleware( {
 			debug: true,
-			src: 	__dirname + '/style',
-			dest: 	__dirname + "/public/css/",
+			force: true,
+			src: 	__dirName + '/style',
+			dest: 	__dirName + "/public/css/",
 			compile : function(str, path) {
 				console.log('compiling');
 				return stylus(str)
@@ -41,16 +52,15 @@ var theApp = (function(theApp, undefined) {
 					.set('warn', true)
 					.set('compress', true)
 			}
-		}) );
-		app.use(passport.initialize());
-		app.use(passport.session());
-		app.use(express.methodOverride());
-		app.use(flash());
-		app.use(app.router);
-		app.use(express.static(__dirname + '/public'));
-		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+		} ) );
+		app.use( passport.initialize() );
+		app.use( passport.session() );
+		app.use( express.methodOverride() );
+		app.use( app.router );
+		app.use( express.static(__dirName + '/public') );
+		
+		app.use( express.errorHandler( { dumpExceptions: true, showStack: true } ) );
 	});
-	require('./routes')(config);
 
 	process.on('uncaughtException', function(err) {
 		if(err.errno === 'EADDRINUSE') {
@@ -72,6 +82,7 @@ var theApp = (function(theApp, undefined) {
 		}
 		res.type('txt').send('Not found');
 	});
+	require('./routes')(cfg, app);
 	var port = process.env.PORT || 5000;
 	app.listen(port, function() {
 		console.log("Listening on " + port);

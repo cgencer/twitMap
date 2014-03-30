@@ -1,4 +1,4 @@
-!!!5
+doctype transitional
 html
   head
     title #{title} - twitMap
@@ -6,9 +6,7 @@ html
   body
     header
       h1 twitMap
-    .container
-      .main-content
-        block content
-      .dumparea
-        block dump
-    block scripts
+    .main
+      block content
+    .sidebar
+      block sidebar
