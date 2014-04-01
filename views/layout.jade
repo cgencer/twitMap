@@ -1,12 +1,18 @@
 doctype transitional
 html
-  head
-    title #{title} - twitMap
-    link(rel='stylesheet', href='/css/style-min.css')
+  include head
   body
-    header
-      h1 twitMap
-    .main
-      block content
-    .sidebar
-      block sidebar
+    #main
+      header
+        h1 twitMap
+      section#content
+        aside#sidebar
+          block sidebar
+        article
+          #map
+          block content
+          script.
+            var map = L.map('map').setView([41.0138400, 28.9496600], 13);
+      footer
+        p Copyright (c) Cem Gencer
+

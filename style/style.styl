@@ -1,16 +1,24 @@
-global-reset()
-grid()
-  column-width = 60px
-  gutter-width = 20px
-  columns = 12
-  total-width = 100%
+@import "fluidity"
 
-.main
-.sidebar
-  float: left
+grid-width = 100%
+grid-min-width = 320px
+base-font-size = 1em
+base-line-height = 1.25em
 
-.main
-  column(9)
+#map
+  height: 450px
+#main
+  grid(80%,960px)
+header
+  background-color darkgray2
+  color white
 
-.sidebar
-  column(3)
+#content
+  aside#sidebar
+    grid-space(20%)
+  article
+    grid-space(80%)
+
+footer
+  background-color lightgray2
+  text-align center
