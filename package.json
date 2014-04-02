@@ -19,6 +19,7 @@
 	},
 	"main": "source/index.js",
 	"dependencies": {
+		"coffee-script": "*",
     	"express": "3.1.0",
 		"http": "*",
 		"path": "*",
@@ -42,7 +43,7 @@
 	},
 	"devDependencies": {},
 	"scripts": {
-		"start": "nodemon source/index.js",
+		"start": "nodemon -e js,jade source/js/index.js",
 		"predeploy": "echo twitMap deploying...",
 		"postdeploy": "echo twitMap deployed."
 	}

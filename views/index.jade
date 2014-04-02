@@ -1,4 +1,10 @@
 extends layout
 
 block content
+  #map
   h2 done.
+  script.
+    var latlng = L.latLng(41.014, 28.949);
+    var map = L.map('map', {center: latlng, zoom: 13});
+    L.marker(latlng).addTo(map);
+    var popup = L.popup().setLatLng(latlng).setContent('<p>Hello world!<br />This is a nice popup.</p>').openOn(map);
