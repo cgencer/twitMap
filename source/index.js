@@ -8,8 +8,6 @@ var theApp = (function(theApp, undefined) {
 		FacebookStrategy = require('passport-facebook').Strategy,
 		path = require('path');
 		
-	require('./routes');
-
 	var env = process.env.NODE_ENV || 'development', cfg = require('./config')[env];
 
 		_.str = require('underscore.string');
@@ -41,13 +39,8 @@ var theApp = (function(theApp, undefined) {
 			compile : function(str, path) {
 				console.log('compiling');
 				return stylus(str)
-					.use( nib() )
-					.use( fontFace() )
-					.use( axis() )
-					.use( fluidity() )
-					.set('filename', path)
-					.set('warn', true)
-					.set('compress', true)
+					.use( nib() ).use( fontFace() ).use( axis() ).use( fluidity() )
+					.set('filename', path).set('warn', true).set('compress', true)
 			}
 		} ) );
 		app.use( passport.initialize() );
